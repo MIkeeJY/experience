@@ -39,8 +39,9 @@ public abstract class BaseFragment extends Fragment {
 
     public abstract View setView(LayoutInflater inflater, ViewGroup container);
 
+    public abstract void afterView();
 
-    private View view;
+    protected View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,7 +56,6 @@ public abstract class BaseFragment extends Fragment {
         afterView();
     }
 
-    public abstract void afterView();
 
     public void intent(Class<?> cls) {
         startActivity(new Intent(getActivity(), cls));
@@ -84,21 +84,37 @@ public abstract class BaseFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
-    // get layout manager
+    /**
+     * get Vertical layout  manager
+     *
+     * @return
+     */
     public LinearLayoutManager getVerticalLayoutManager() {
         return new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
     }
-    // get layout manager
+
+    /**
+     * get Horizontal layout manager
+     *
+     * @return
+     */
     public LinearLayoutManager getHorizontalLayoutManager() {
         return new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
     }
 
-    // get layout manager
+    /**
+     * get layout manager 默认两列
+     */
     public GridLayoutManager getGridLayoutManager() {
         return getGridLayoutManager(2);
     }
 
-    // get layout manager
+    /**
+     * get layout manager
+     *
+     * @param spanCount
+     * @return
+     */
     public GridLayoutManager getGridLayoutManager(int spanCount) {
         return new AutoGridLayoutManager(getActivity(), spanCount);
     }
@@ -116,7 +132,6 @@ public abstract class BaseFragment extends Fragment {
         showToastMessage("功能仍在努力开发中");
 
     }
-
 
     protected AlertDialog dialog;
 
