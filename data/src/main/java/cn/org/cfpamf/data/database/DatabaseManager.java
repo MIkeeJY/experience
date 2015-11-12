@@ -127,24 +127,29 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
         }
     }
 
+    /**
+     * 只关闭helper就好,看源码就知道helper关闭的时候会关闭数据库
+     */
     @Override
     public void closeDbConnections() {
-        if (daoSession != null) {
-            daoSession.clear();
-            daoSession = null;
+        if (mHelper != null) {
+            mHelper.close();
+            mHelper = null;
         }
-        if (database != null && database.isOpen()) {
-            database.close();
-        }
+
+    }
+
+    @Override
+    public void clearDaoSession() {
         if (daoMaster != null) {
             daoMaster = null;
         }
         if (asyncSession != null) {
             asyncSession = null;
         }
-        if (mHelper != null) {
-            mHelper.close();
-            mHelper = null;
+        if (daoSession != null) {
+            daoSession.clear();
+            daoSession = null;
         }
     }
 

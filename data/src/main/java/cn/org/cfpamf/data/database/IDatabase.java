@@ -29,8 +29,15 @@ public interface IDatabase<M> {
 
     /**
      * Closing available connections
+     * 在合适的时候关闭database
      */
     void closeDbConnections();
+
+    /**
+     * Clear daoSession
+     * 删除数据查询所有缓存,在程序推出的时候调用即可
+     */
+    void clearDaoSession();
 
     /**
      * Delete all tables and content from our database
