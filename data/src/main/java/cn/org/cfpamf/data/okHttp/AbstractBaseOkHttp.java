@@ -108,6 +108,7 @@ public abstract class AbstractBaseOkHttp implements IOkHttpRequest, IOkHttpRespo
 
     /**
      * 处理接口返回
+     *
      * @return
      */
     @Override
@@ -119,11 +120,17 @@ public abstract class AbstractBaseOkHttp implements IOkHttpRequest, IOkHttpRespo
             }
 
             @Override
-            public void onResponse(Response response) throws IOException {
-                if (response.isSuccessful())
-                    onSuccess(response);
-                else
-                    throw new IOException();
+            public void onResponse(Response response) {
+                try {
+                    if (response.isSuccessful()) {
+                        onSuccess(response);
+                    } else {
+                        onFailed(new IOException("onFailed" + response));
+                    }
+                } catch (IOException e) {
+                    onFailed(e);
+                }
+
             }
         };
     }

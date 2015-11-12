@@ -33,7 +33,7 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
     protected static DaoMaster daoMaster;
     protected static DaoSession daoSession;
     protected static AsyncSession asyncSession;
-    protected static List<AsyncOperation> completedOperations;
+    protected static List<AsyncOperation> completedOperations = new CopyOnWriteArrayList<>();
 
     /**
      * Constructs a new DatabaseManager with the specified arguments.
@@ -53,12 +53,6 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
     public void onAsyncOperationCompleted(AsyncOperation operation) {
         completedOperations.add(operation);
     }
-
-    protected void assertWaitForCompletion1Sec() {
-        asyncSession.waitForCompletion(1000);
-        asyncSession.isCompleted();
-    }
-
     /**
      * Query for readable DB
      */
@@ -84,7 +78,6 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
         database = mHelper.getReadableDatabase();
         getDaoMaster();
         getDaoAsyncSession();
-        completedOperations = new CopyOnWriteArrayList<AsyncOperation>();
     }
 
     /**
@@ -94,7 +87,6 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
         database = mHelper.getWritableDatabase();
         getDaoMaster();
         getDaoAsyncSession();
-        completedOperations = new CopyOnWriteArrayList<AsyncOperation>();
     }
 
     /**
@@ -128,8 +120,8 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
      * 初始化AsyncDaoSession
      */
     private void getDaoAsyncSession() {
-        if (daoSession == null) {
-            daoSession = daoMaster.newSession();
+        if (asyncSession == null) {
+            getDaoSession();
             asyncSession = daoSession.startAsyncSession();
             asyncSession.setListener(this);
         }
@@ -146,6 +138,9 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
         }
         if (daoMaster != null) {
             daoMaster = null;
+        }
+        if (asyncSession != null) {
+            asyncSession = null;
         }
         if (mHelper != null) {
             mHelper.close();

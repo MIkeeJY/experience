@@ -4,6 +4,7 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import cn.org.cfpamf.data.base.BaseActivity;
+import cn.org.cfpamf.data.database.DatabaseManager;
 import cn.org.cfpamf.data.manager.StartServiceManager;
 import cn.org.cfpamf.data.okHttp.BaiduTestOkHttp;
 import cn.org.cfpamf.data.sql.db.Baidu;
@@ -24,7 +25,14 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void afterView() {
-        StartServiceManager.startBaiduOkHttp(this);
+
+        new DatabaseManager<Baidu>(this).dropDatabase();
+        new DatabaseManager<Baidu>(this).closeDbConnections();
+        new DatabaseManager<Baidu>(this).dropDatabase();
+        new DatabaseManager<Baidu>(this).loadAll(Baidu.class);
+        new DatabaseManager<Baidu>(this).dropDatabase();
+
+//        StartServiceManager.startBaiduOkHttp(this);
     }
 
     /**

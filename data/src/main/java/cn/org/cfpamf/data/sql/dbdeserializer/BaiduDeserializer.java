@@ -23,10 +23,10 @@ public class BaiduDeserializer implements JsonDeserializer<Baidu> {
 
     @Override
     public Baidu deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        Baidu photoInfo = new Baidu();
+        Baidu baidu = new Baidu();
         JsonObject jsonObject = json.getAsJsonObject();
-        photoInfo.setId(jsonObject.get("id").getAsString());
-        photoInfo.setResponse(jsonObject.get("reponse").getAsString());
-        return photoInfo;
+        baidu.setId(jsonObject.get("id").getAsString());
+        baidu.setResponse(jsonObject.get("reponse").getAsString());
+        return baidu;
     }
 }
