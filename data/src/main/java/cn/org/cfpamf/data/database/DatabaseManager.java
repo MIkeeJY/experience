@@ -24,8 +24,7 @@ import de.greenrobot.dao.async.AsyncSession;
  */
 public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> {
 
-    private static final StringBuilder DEFAULT_DATABASE_NAME = new StringBuilder().append("name");
-    private static final String END_SUFFIX = ".db";
+    private static final String DEFAULT_DATABASE_NAME = "name.db";
 
     /**
      * The Android Activity reference for access to DatabaseManager.
@@ -39,16 +38,21 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
     protected Context context;
     protected String dbName;
 
+    /**
+     * create new DataBase
+     */
+    public DatabaseManager(@NonNull Context context) {
+        this.context = context;
+        this.dbName = DEFAULT_DATABASE_NAME;
+        getOpenHelper(context,dbName);
+    }
 
     /**
      * create new DataBase
      */
-    public DatabaseManager(@NonNull Context context, @Nullable String dataBaseName) {
+    public DatabaseManager(@NonNull Context context, @NonNull String dataBaseName) {
         this.context = context;
-        this.dbName = dataBaseName + END_SUFFIX;
-        if (StringUtils.isEmpty(dataBaseName)) {
-            this.dbName = DEFAULT_DATABASE_NAME.append(END_SUFFIX).toString();
-        }
+        this.dbName = dataBaseName;
         getOpenHelper(context, dataBaseName);
     }
 
@@ -61,7 +65,7 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
      * Query for readable DB
      */
     protected void openReadableDb() throws SQLiteException {
-        database = getOpenHelper(context,dbName).getReadableDatabase();
+        database = getOpenHelper(context, dbName).getReadableDatabase();
         getDaoMaster();
         getDaoSession();
     }
@@ -70,7 +74,7 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
      * Query for writable DB
      */
     protected void openWritableDb() throws SQLiteException {
-        database = getOpenHelper(context,dbName).getWritableDatabase();
+        database = getOpenHelper(context, dbName).getWritableDatabase();
         getDaoMaster();
         getDaoSession();
     }
@@ -79,7 +83,7 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
      * Query for readable DB
      */
     protected void openReadableDbAsync() throws SQLiteException {
-        database = getOpenHelper(context,dbName).getReadableDatabase();
+        database = getOpenHelper(context, dbName).getReadableDatabase();
         getDaoMaster();
         getDaoAsyncSession();
     }
@@ -88,7 +92,7 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
      * Query for writable DB
      */
     protected void openWritableDbAsync() throws SQLiteException {
-        database = getOpenHelper(context,dbName).getWritableDatabase();
+        database = getOpenHelper(context, dbName).getWritableDatabase();
         getDaoMaster();
         getDaoAsyncSession();
     }
