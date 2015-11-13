@@ -13,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import cn.org.cfpamf.data.sql.dao.DaoMaster;
 import cn.org.cfpamf.data.sql.dao.DaoSession;
+import cn.org.cfpamf.data.sql.db.Baidu;
 import cn.org.cfpamf.data.util.StringUtils;
 import de.greenrobot.dao.async.AsyncOperation;
 import de.greenrobot.dao.async.AsyncOperationListener;
@@ -103,6 +104,7 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
     protected DaoMaster.DevOpenHelper getOpenHelper(@NonNull Context context, @Nullable String dataBaseName) {
         if (mHelper == null) {
             mHelper = new DaoMaster.DevOpenHelper(context, dataBaseName, null);
+
         }
         return mHelper;
     }
@@ -145,7 +147,16 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
             mHelper.close();
             mHelper = null;
         }
-
+        if (daoMaster != null) {
+            daoMaster = null;
+        }
+        if (asyncSession != null) {
+            asyncSession = null;
+        }
+        if (daoSession != null) {
+            daoSession.clear();
+            daoSession = null;
+        }
     }
 
     @Override
@@ -166,7 +177,7 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
     public synchronized void dropDatabase() {
         try {
             openWritableDb();
-//            daoSession.deleteAll(AdminDivisionInfo.class);    // clear all elements from a table
+            daoSession.deleteAll(Baidu.class);    // clear all elements from a table
         } catch (Exception e) {
             Logger.e(e.toString());
         }
