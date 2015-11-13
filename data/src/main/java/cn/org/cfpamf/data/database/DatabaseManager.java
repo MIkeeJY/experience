@@ -13,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import cn.org.cfpamf.data.sql.dao.DaoMaster;
 import cn.org.cfpamf.data.sql.dao.DaoSession;
+import cn.org.cfpamf.data.util.StringUtils;
 import de.greenrobot.dao.async.AsyncOperation;
 import de.greenrobot.dao.async.AsyncOperationListener;
 import de.greenrobot.dao.async.AsyncSession;
@@ -23,7 +24,8 @@ import de.greenrobot.dao.async.AsyncSession;
  */
 public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> {
 
-    private static final String DATABASE_NAME = "name.db";
+    private static final StringBuilder DEFAULT_DATABASE_NAME = new StringBuilder().append("name");
+    private static final String END_SUFFIX = ".db";
 
     /**
      * The Android Activity reference for access to DatabaseManager.
@@ -34,30 +36,32 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
     protected static DaoSession daoSession;
     protected static AsyncSession asyncSession;
     protected static List<AsyncOperation> completedOperations = new CopyOnWriteArrayList<>();
+    protected Context context;
+    protected String dbName;
 
-    /**
-     * Constructs a new DatabaseManager with the specified arguments.
-     */
-    public DatabaseManager(@NonNull Context context) {
-        getOpenHelper(context, "");
-    }
 
     /**
      * create new DataBase
      */
-    public DatabaseManager(@NonNull Context context, @Nullable String db_name) {
-        getOpenHelper(context, db_name);
+    public DatabaseManager(@NonNull Context context, @Nullable String dataBaseName) {
+        this.context = context;
+        this.dbName = dataBaseName + END_SUFFIX;
+        if (StringUtils.isEmpty(dataBaseName)) {
+            this.dbName = DEFAULT_DATABASE_NAME.append(END_SUFFIX).toString();
+        }
+        getOpenHelper(context, dataBaseName);
     }
 
     @Override
     public void onAsyncOperationCompleted(AsyncOperation operation) {
         completedOperations.add(operation);
     }
+
     /**
      * Query for readable DB
      */
     protected void openReadableDb() throws SQLiteException {
-        database = mHelper.getReadableDatabase();
+        database = getOpenHelper(context,dbName).getReadableDatabase();
         getDaoMaster();
         getDaoSession();
     }
@@ -66,7 +70,7 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
      * Query for writable DB
      */
     protected void openWritableDb() throws SQLiteException {
-        database = mHelper.getWritableDatabase();
+        database = getOpenHelper(context,dbName).getWritableDatabase();
         getDaoMaster();
         getDaoSession();
     }
@@ -75,7 +79,7 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
      * Query for readable DB
      */
     protected void openReadableDbAsync() throws SQLiteException {
-        database = mHelper.getReadableDatabase();
+        database = getOpenHelper(context,dbName).getReadableDatabase();
         getDaoMaster();
         getDaoAsyncSession();
     }
@@ -84,7 +88,7 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
      * Query for writable DB
      */
     protected void openWritableDbAsync() throws SQLiteException {
-        database = mHelper.getWritableDatabase();
+        database = getOpenHelper(context,dbName).getWritableDatabase();
         getDaoMaster();
         getDaoAsyncSession();
     }
@@ -92,10 +96,11 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
     /**
      * 初始化DatabaseHelper
      */
-    protected void getOpenHelper(@NonNull Context context, @Nullable String dataBaseName) {
+    protected DaoMaster.DevOpenHelper getOpenHelper(@NonNull Context context, @Nullable String dataBaseName) {
         if (mHelper == null) {
-            mHelper = new DaoMaster.DevOpenHelper(context, dataBaseName + DATABASE_NAME, null);
+            mHelper = new DaoMaster.DevOpenHelper(context, dataBaseName, null);
         }
+        return mHelper;
     }
 
     /**
