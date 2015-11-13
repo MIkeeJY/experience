@@ -161,12 +161,6 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
 
     @Override
     public void clearDaoSession() {
-        if (daoMaster != null) {
-            daoMaster = null;
-        }
-        if (asyncSession != null) {
-            asyncSession = null;
-        }
         if (daoSession != null) {
             daoSession.clear();
             daoSession = null;

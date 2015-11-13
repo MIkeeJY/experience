@@ -28,7 +28,8 @@ public class MainActivity extends BaseActivity {
 
         new DatabaseManager<Baidu>(this).dropDatabase();
         new DatabaseManager<Baidu>(this).closeDbConnections();
-        new DatabaseManager<Baidu>(this).dropDatabase();
+        new DatabaseManager<Baidu>(this).loadAll(Baidu.class);
+        new DatabaseManager<Baidu>(this).clearDaoSession();
         new DatabaseManager<Baidu>(this).loadAll(Baidu.class);
         new DatabaseManager<Baidu>(this).dropDatabase();
 
