@@ -1,6 +1,11 @@
 package cn.org.cfpamf.data.database;
 
+import java.util.Collection;
 import java.util.List;
+
+import de.greenrobot.dao.AbstractDao;
+import de.greenrobot.dao.query.Query;
+import de.greenrobot.dao.query.QueryBuilder;
 
 /**
  * 项目名称：groupBackstage
@@ -11,43 +16,101 @@ import java.util.List;
  * 修改时间：2015/8/28 17:05
  * 修改备注：
  */
-public interface IDatabase<M> {
+public interface IDatabase<M, K> {
 
-    void insert(M m);
+    boolean insert(M m);
 
-    void delete(M m);
+    boolean delete(M m);
 
-    void insertOrReplace(M m);
+    boolean deleteByKey(K key);
 
-    void update(M m);
+    boolean deleteList(List<M> mList);
 
-    M selectByPrimaryKey(Class<M> entityClass, String Id);
+    boolean deleteByKeyInTx(K... key);
 
-    List<M> loadAll(Class<M> entityClass);
+    boolean deleteAll();
 
-    void refresh(M m);
+    boolean insertOrReplace(M m);
+
+    boolean update(M m);
+
+    boolean updateInTx(M... m);
+
+    boolean updateList(List<M> mList);
+
+    M selectByPrimaryKey(K key);
+
+    List<M> loadAll();
+
+    boolean refresh(M m);
 
     /**
      * Closing available connections
-     * 在合适的时候关闭database
      */
     void closeDbConnections();
 
     /**
-     * Clear daoSession
-     * 删除数据查询所有缓存,在程序推出的时候调用即可
+     * 清理缓存
      */
     void clearDaoSession();
 
     /**
      * Delete all tables and content from our database
      */
-    void dropDatabase();
+    boolean dropDatabase();
 
     /**
      * 事务
      */
     void runInTx(Runnable runnable);
 
+    /**
+     * 获取Dao
+     *
+     * @return
+     */
+    AbstractDao<M, K> getAbstractDao();
+
+    /**
+     * 添加集合
+     *
+     * @param mList
+     */
+    boolean insertList(List<M> mList);
+
+    /**
+     * 添加集合
+     *
+     * @param mList
+     */
+    boolean insertOrReplaceList(List<M> mList);
+
+    /**
+     * 自定义查询
+     *
+     * @return
+     */
+    QueryBuilder<M> getQueryBuilder();
+
+    /**
+     * @param where
+     * @param selectionArg
+     * @return
+     */
+    List<M> queryRaw(String where, String... selectionArg);
+
+    /**
+     * @param where
+     * @param selectionArg
+     * @return
+     */
+    Query<M> queryRawCreate(String where, Object... selectionArg);
+
+    /**
+     * @param where
+     * @param selectionArg
+     * @return
+     */
+    Query<M> queryRawCreateListArgs(String where, Collection<Object> selectionArg);
 
 }

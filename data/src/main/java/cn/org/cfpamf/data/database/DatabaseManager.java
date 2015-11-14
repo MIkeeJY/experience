@@ -6,38 +6,47 @@ import android.database.sqlite.SQLiteException;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.orhanobut.logger.Logger;
-
+import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+
 
 import cn.org.cfpamf.data.sql.dao.DaoMaster;
 import cn.org.cfpamf.data.sql.dao.DaoSession;
 import cn.org.cfpamf.data.sql.db.Baidu;
+import cn.org.cfpamf.data.util.ListUtils;
 import cn.org.cfpamf.data.util.StringUtils;
-import de.greenrobot.dao.async.AsyncOperation;
-import de.greenrobot.dao.async.AsyncOperationListener;
-import de.greenrobot.dao.async.AsyncSession;
+import de.greenrobot.dao.AbstractDao;
+import de.greenrobot.dao.query.Query;
+import de.greenrobot.dao.query.QueryBuilder;
 
 
 /**
  * @author Octa
  */
-public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> {
+public abstract class DatabaseManager<M, K> implements IDatabase<M, K> {
 
-    private static final String DEFAULT_DATABASE_NAME = "name.db";
+    private static final String DEFAULT_DATABASE_NAME = "cfpamf.db";
 
     /**
      * The Android Activity reference for access to DatabaseManager.
      */
     protected static DaoMaster.DevOpenHelper mHelper;
-    protected static SQLiteDatabase database;
-    protected static DaoMaster daoMaster;
     protected static DaoSession daoSession;
-    protected static AsyncSession asyncSession;
-    protected static List<AsyncOperation> completedOperations = new CopyOnWriteArrayList<>();
     protected Context context;
     protected String dbName;
+    /**
+     * 删除数据库时获取实例的方法
+     * @param context
+     * @return
+     */
+    public static DatabaseManager getInstance(@NonNull Context context) {
+        return new DatabaseManager(context) {
+            @Override
+            public AbstractDao getAbstractDao() {
+                return null;
+            }
+        };
+    }
 
     /**
      * create new DataBase
@@ -45,7 +54,7 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
     public DatabaseManager(@NonNull Context context) {
         this.context = context;
         this.dbName = DEFAULT_DATABASE_NAME;
-        getOpenHelper(context,dbName);
+        getOpenHelper(context, dbName);
     }
 
     /**
@@ -57,17 +66,11 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
         getOpenHelper(context, dataBaseName);
     }
 
-    @Override
-    public void onAsyncOperationCompleted(AsyncOperation operation) {
-        completedOperations.add(operation);
-    }
-
     /**
      * Query for readable DB
      */
     protected void openReadableDb() throws SQLiteException {
-        database = getOpenHelper(context, dbName).getReadableDatabase();
-        getDaoMaster();
+        getDaoMaster(getReadableDatabase());
         getDaoSession();
     }
 
@@ -75,27 +78,22 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
      * Query for writable DB
      */
     protected void openWritableDb() throws SQLiteException {
-        database = getOpenHelper(context, dbName).getWritableDatabase();
-        getDaoMaster();
+        getDaoMaster(getWritableDatabase());
         getDaoSession();
     }
 
     /**
-     * Query for readable DB
+     * @return
      */
-    protected void openReadableDbAsync() throws SQLiteException {
-        database = getOpenHelper(context, dbName).getReadableDatabase();
-        getDaoMaster();
-        getDaoAsyncSession();
+    protected SQLiteDatabase getWritableDatabase() {
+        return getOpenHelper(context, dbName).getWritableDatabase();
     }
 
     /**
-     * Query for writable DB
+     * @return
      */
-    protected void openWritableDbAsync() throws SQLiteException {
-        database = getOpenHelper(context, dbName).getWritableDatabase();
-        getDaoMaster();
-        getDaoAsyncSession();
+    protected SQLiteDatabase getReadableDatabase() {
+        return getOpenHelper(context, dbName).getReadableDatabase();
     }
 
     /**
@@ -104,7 +102,6 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
     protected DaoMaster.DevOpenHelper getOpenHelper(@NonNull Context context, @Nullable String dataBaseName) {
         if (mHelper == null) {
             mHelper = new DaoMaster.DevOpenHelper(context, dataBaseName, null);
-
         }
         return mHelper;
     }
@@ -112,31 +109,20 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
     /**
      * 初始化DaoMaster
      */
-    private void getDaoMaster() {
-        if (daoMaster == null) {
-            daoMaster = new DaoMaster(database);
-        }
+    private DaoMaster getDaoMaster(SQLiteDatabase database) {
+        return new DaoMaster(database);
     }
 
     /**
      * 初始化DaoSession
      */
-    private void getDaoSession() {
+    private DaoSession getDaoSession() {
         if (daoSession == null) {
-            daoSession = daoMaster.newSession();
+            daoSession = getDaoMaster(getWritableDatabase()).newSession();
         }
+        return daoSession;
     }
 
-    /**
-     * 初始化AsyncDaoSession
-     */
-    private void getDaoAsyncSession() {
-        if (asyncSession == null) {
-            getDaoSession();
-            asyncSession = daoSession.startAsyncSession();
-            asyncSession.setListener(this);
-        }
-    }
 
     /**
      * 只关闭helper就好,看源码就知道helper关闭的时候会关闭数据库
@@ -146,12 +132,6 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
         if (mHelper != null) {
             mHelper.close();
             mHelper = null;
-        }
-        if (daoMaster != null) {
-            daoMaster = null;
-        }
-        if (asyncSession != null) {
-            asyncSession = null;
         }
         if (daoSession != null) {
             daoSession.clear();
@@ -168,73 +148,165 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
     }
 
     @Override
-    public synchronized void dropDatabase() {
+    public boolean dropDatabase() {
         try {
             openWritableDb();
+//            DaoMaster.dropAllTables(database, true); // drops all tables
+//            mHelper.onCreate(database);              // creates the tables
             daoSession.deleteAll(Baidu.class);    // clear all elements from a table
         } catch (Exception e) {
-            Logger.e(e.toString());
+            e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     @Override
-    public void insert(@NonNull M m) {
+    public boolean insert(@NonNull M m) {
         try {
+            if (m == null) return false;
             openWritableDb();
-            daoSession.insert(m);
+            getAbstractDao().insert(m);
         } catch (SQLiteException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     @Override
-    public void delete(@NonNull M m) {
+    public boolean insertOrReplace(@NonNull M m) {
         try {
+            if (m == null) return false;
             openWritableDb();
-            daoSession.delete(m);
+            getAbstractDao().insertOrReplace(m);
         } catch (SQLiteException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     @Override
-    public void insertOrReplace(@NonNull M m) {
+    public boolean delete(@NonNull M m) {
         try {
+            if (m == null) return false;
             openWritableDb();
-            daoSession.insertOrReplace(m);
+            getAbstractDao().delete(m);
         } catch (SQLiteException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     @Override
-    public void update(@NonNull M m) {
+    public boolean deleteByKey(K key) {
         try {
+            if (StringUtils.isEmpty(key.toString())) return false;
             openWritableDb();
-            daoSession.update(m);
+            getAbstractDao().deleteByKey(key);
         } catch (SQLiteException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     @Override
-    public M selectByPrimaryKey(@NonNull Class<M> entityClass, @NonNull String Id) {
-        M m = null;
+    public boolean deleteByKeyInTx(K... key) {
+        try {
+            openWritableDb();
+            getAbstractDao().deleteByKeyInTx(key);
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean deleteList(List<M> mList) {
+        try {
+            if (ListUtils.isEmpty(mList)) return false;
+            openWritableDb();
+            getAbstractDao().deleteInTx(mList);
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean deleteAll() {
+        try {
+            openWritableDb();
+            getAbstractDao().deleteAll();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
+    public boolean update(@NonNull M m) {
+        try {
+            if (m == null) return false;
+            openWritableDb();
+            getAbstractDao().update(m);
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean updateInTx(M... m) {
+        try {
+            if (m == null) return false;
+            openWritableDb();
+            getAbstractDao().updateInTx(m);
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean updateList(List<M> mList) {
+        try {
+            if (ListUtils.isEmpty(mList)) return false;
+            openWritableDb();
+            getAbstractDao().updateInTx(mList);
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public M selectByPrimaryKey(@NonNull K key) {
         try {
             openReadableDb();
-            m = daoSession.load(entityClass, Id);
+            return getAbstractDao().load(key);
         } catch (SQLiteException e) {
             e.printStackTrace();
+            return null;
         }
-        return m;
     }
 
     @Override
-    public List<M> loadAll(@NonNull Class<M> entityClass) {
+    public List<M> loadAll() {
         List<M> mList = null;
         try {
             openReadableDb();
-            mList = daoSession.loadAll(entityClass);
+            mList = getAbstractDao().loadAll();
         } catch (SQLiteException e) {
             e.printStackTrace();
         }
@@ -242,21 +314,90 @@ public class DatabaseManager<M> implements AsyncOperationListener, IDatabase<M> 
     }
 
     @Override
-    public void refresh(@NonNull M m) {
+    public boolean refresh(@NonNull M m) {
         try {
+            if (m == null) return false;
             openWritableDb();
-            daoSession.refresh(m);
+            getAbstractDao().refresh(m);
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void runInTx(Runnable runnable) {
+        try {
+            openReadableDb();
+            getDaoSession().runInTx(runnable);
         } catch (SQLiteException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void runInTx(Runnable runnable) {
-        openReadableDb();
-        daoSession.runInTx(runnable);
+    public boolean insertList(@NonNull List<M> list) {
+        try {
+            if (ListUtils.isEmpty(list)) return false;
+            openWritableDb();
+            getAbstractDao().insertInTx(list);
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
-//    @Override
+
+    /**
+     * @param list
+     * @return
+     */
+    @Override
+    public boolean insertOrReplaceList(@NonNull List<M> list) {
+        try {
+            if (ListUtils.isEmpty(list)) return false;
+            openWritableDb();
+            getAbstractDao().insertOrReplaceInTx(list);
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public QueryBuilder<M> getQueryBuilder() {
+        openReadableDb();
+        return getAbstractDao().queryBuilder();
+    }
+
+    /**
+     * @param where
+     * @param selectionArg
+     * @return
+     */
+    @Override
+    public List<M> queryRaw(String where, String... selectionArg) {
+        openReadableDb();
+        return getAbstractDao().queryRaw(where, selectionArg);
+    }
+
+    @Override
+    public Query<M> queryRawCreate(String where, Object... selectionArg) {
+        openReadableDb();
+        return getAbstractDao().queryRawCreate(where, selectionArg);
+    }
+
+    @Override
+    public Query<M> queryRawCreateListArgs(String where, Collection<Object> selectionArg) {
+        openReadableDb();
+        return getAbstractDao().queryRawCreateListArgs(where, selectionArg);
+    }
+    //    @Override
 //    public synchronized void bulkInsertPhoneNumbers(Set<DBPhoneNumber> phoneNumbers) {
 //        try {
 //            if (phoneNumbers != null && phoneNumbers.size() > 0) {

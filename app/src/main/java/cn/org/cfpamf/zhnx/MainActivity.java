@@ -25,15 +25,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void afterView() {
+        StartServiceManager.startBaiduOkHttp(this);
 
-        new DatabaseManager<Baidu>(this).dropDatabase();
-        new DatabaseManager<Baidu>(this).closeDbConnections();
-        new DatabaseManager<Baidu>(this).loadAll(Baidu.class);
-        new DatabaseManager<Baidu>(this).clearDaoSession();
-        new DatabaseManager<Baidu>(this).loadAll(Baidu.class);
-        new DatabaseManager<Baidu>(this).dropDatabase();
-
-//        StartServiceManager.startBaiduOkHttp(this);
     }
 
     /**
