@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">EXP</string>
+    <string name="app_name_debug">EXP_debug</string>
     <string name="title_main_activity">demo</string>
 </resources>

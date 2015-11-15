@@ -1,34 +1,49 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "cn.org.cfpamf.zhnx"
-        minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
     }
     buildTypes {
-        release {
+        // minifyEnabled 混淆处理
+        // shrinkResources 去除无用资源
+        // signingConfig 签名
+        // proguardFiles 混淆配置
+        // applicationIdSuffix 增加APP ID的后缀
+        // debuggable 是否保留调试信息
+        debug {
+            manifestPlaceholders = [app_label:"@string/app_name_debug"]
+            applicationIdSuffix ".debug"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [app_label:"@string/app_name"]
         }
     }
     signingConfigs {
         debug {
-            storeFile file( "key.jks")
-            storePassword "applicationkey"
-            keyAlias "zzy"
-            keyPassword "applicaiton"
+            storeFile file( "key_app.jks")
+            storePassword "cfpamf2015"
+            keyAlias "zhnx"
+            keyPassword "cfpamf"
         }
         release {
-            storeFile file( "key.jks")
-            storePassword "applicationkey"
-            keyAlias "zzy"
-            keyPassword "applicaiton"
+            storeFile file( "key_app.jks")
+            storePassword "cfpamf2015"
+            keyAlias "zhnx"
+            keyPassword "cfpamf"
         }
     }
     compileOptions {

@@ -2,9 +2,9 @@ package cn.org.cfpamf.zhnx;
 
 import android.widget.TextView;
 
+
 import butterknife.Bind;
 import cn.org.cfpamf.data.base.BaseActivity;
-import cn.org.cfpamf.data.database.DatabaseManager;
 import cn.org.cfpamf.data.manager.StartServiceManager;
 import cn.org.cfpamf.data.okHttp.BaiduTestOkHttp;
 import cn.org.cfpamf.data.sql.db.Baidu;
@@ -26,7 +26,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void afterView() {
         StartServiceManager.startBaiduOkHttp(this);
-
     }
 
     /**
