@@ -37,3 +37,7 @@ local.properties
 app/app.iml
 data/data.iml
 domain/domain.iml
+.idea/libraries/baseLibrary_1_0_rc5.xml
+.idea/libraries/compiler_1_0_rc5.xml
+.idea/libraries/juniversalchardet_1_0_3.xml
+.idea/libraries/library_1_0_rc3.xml

@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import java.util.Map;
 import java.util.Set;
 
-import butterknife.ButterKnife;
 import cn.org.cfpamf.data.util.ToastUtils;
 import cn.org.cfpamf.data.manager.AutoGridLayoutManager;
 import de.greenrobot.event.EventBus;
@@ -46,7 +45,6 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = setView(inflater, container);
-        ButterKnife.bind(this, view);
         return view;
     }
 
@@ -191,6 +189,5 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 }

@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import cn.org.cfpamf.data.database.DatabaseManager;
 import cn.org.cfpamf.data.exception.e.ServerResponseException;
+import cn.org.cfpamf.data.sql.BaiduDbManager;
 import cn.org.cfpamf.data.sql.db.Baidu;
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.event.EventBus;
@@ -73,12 +74,7 @@ public class BaiduTestOkHttp extends AbstractBaseOkHttp {
             baiu.setId(UUID.randomUUID().toString());
             baiu.setResponse(strResponse);
             //插入数据库
-            boolean success = new DatabaseManager<Baidu, String>(context) {
-                @Override
-                public AbstractDao<Baidu, String> getAbstractDao() {
-                    return daoSession.getBaiduDao();
-                }
-            }.insert(baiu);
+            boolean success = new BaiduDbManager(context).insert(baiu);
             if (success) {
                 //通知前台更新
                 EventBus.getDefault().post(baiu);

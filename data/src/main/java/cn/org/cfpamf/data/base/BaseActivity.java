@@ -36,7 +36,6 @@ import com.orhanobut.logger.Logger;
 import java.util.Map;
 import java.util.Set;
 
-import butterknife.ButterKnife;
 import cn.org.cfpamf.data.R;
 import cn.org.cfpamf.data.bus.NetStatusEvent;
 import cn.org.cfpamf.data.manager.AppManager;
@@ -78,7 +77,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         AppManager.getAppManager().addActivity(this);
         setLayoutContentView();
-        ButterKnife.bind(this);
         afterView();
     }
 
@@ -225,7 +223,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
         AppManager.getAppManager().finishActivity(this);
     }
 

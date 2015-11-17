@@ -1,18 +1,17 @@
 package cn.org.cfpamf.zhnx;
 
-import android.widget.TextView;
+import android.databinding.DataBindingUtil;
 
 
-import butterknife.Bind;
 import cn.org.cfpamf.data.base.BaseActivity;
 import cn.org.cfpamf.data.manager.StartServiceManager;
 import cn.org.cfpamf.data.okHttp.BaiduTestOkHttp;
 import cn.org.cfpamf.data.sql.db.Baidu;
+import cn.org.cfpamf.zhnx.databinding.ActivityMainBinding;
 
 public class MainActivity extends BaseActivity {
 
-    @Bind(R.id.text_response)
-    TextView text_response;
+    private ActivityMainBinding activityMainBinding;
 
     @Override
     protected void setToolbar() {
@@ -20,7 +19,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void setLayoutContentView() {
-        setContentView(R.layout.activity_main);
+        activityMainBinding
+                = DataBindingUtil.setContentView(this, R.layout.activity_main);
     }
 
     @Override
@@ -39,10 +39,11 @@ public class MainActivity extends BaseActivity {
 
     /**
      * 处理成功信息
+     *
      * @param baidu
      */
     public void onEventMainThread(Baidu baidu) {
         //更新UI
-        text_response.setText(baidu.getResponse());
+        activityMainBinding.setBaidu(baidu);
     }
 }

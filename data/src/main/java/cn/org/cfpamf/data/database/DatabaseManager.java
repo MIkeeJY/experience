@@ -30,23 +30,13 @@ public abstract class DatabaseManager<M, K> implements IDatabase<M, K> {
     /**
      * The Android Activity reference for access to DatabaseManager.
      */
-    protected static DaoMaster.DevOpenHelper mHelper;
-    protected static DaoSession daoSession;
+    private static DaoMaster.DevOpenHelper mHelper;
+    private static DaoSession daoSession;
+    private static SQLiteDatabase database;
+    private static DaoMaster daoMaster;
+
     protected Context context;
     protected String dbName;
-    /**
-     * 删除数据库时获取实例的方法
-     * @param context
-     * @return
-     */
-    public static DatabaseManager getInstance(@NonNull Context context) {
-        return new DatabaseManager(context) {
-            @Override
-            public AbstractDao getAbstractDao() {
-                return null;
-            }
-        };
-    }
 
     /**
      * create new DataBase
@@ -70,7 +60,8 @@ public abstract class DatabaseManager<M, K> implements IDatabase<M, K> {
      * Query for readable DB
      */
     protected void openReadableDb() throws SQLiteException {
-        getDaoMaster(getReadableDatabase());
+        getReadableDatabase();
+        getDaoMaster();
         getDaoSession();
     }
 
@@ -78,7 +69,8 @@ public abstract class DatabaseManager<M, K> implements IDatabase<M, K> {
      * Query for writable DB
      */
     protected void openWritableDb() throws SQLiteException {
-        getDaoMaster(getWritableDatabase());
+        getWritableDatabase();
+        getDaoMaster();
         getDaoSession();
     }
 
@@ -86,14 +78,16 @@ public abstract class DatabaseManager<M, K> implements IDatabase<M, K> {
      * @return
      */
     protected SQLiteDatabase getWritableDatabase() {
-        return getOpenHelper(context, dbName).getWritableDatabase();
+        database = getOpenHelper(context, dbName).getWritableDatabase();
+        return database;
     }
 
     /**
      * @return
      */
     protected SQLiteDatabase getReadableDatabase() {
-        return getOpenHelper(context, dbName).getReadableDatabase();
+        database = getOpenHelper(context, dbName).getReadableDatabase();
+        return database;
     }
 
     /**
@@ -109,16 +103,17 @@ public abstract class DatabaseManager<M, K> implements IDatabase<M, K> {
     /**
      * 初始化DaoMaster
      */
-    private DaoMaster getDaoMaster(SQLiteDatabase database) {
-        return new DaoMaster(database);
+    private DaoMaster getDaoMaster() {
+        daoMaster = new DaoMaster(database);
+        return daoMaster;
     }
 
     /**
      * 初始化DaoSession
      */
-    private DaoSession getDaoSession() {
+    protected DaoSession getDaoSession() {
         if (daoSession == null) {
-            daoSession = getDaoMaster(getWritableDatabase()).newSession();
+            daoSession = daoMaster.newSession();
         }
         return daoSession;
     }
@@ -397,6 +392,7 @@ public abstract class DatabaseManager<M, K> implements IDatabase<M, K> {
         openReadableDb();
         return getAbstractDao().queryRawCreateListArgs(where, selectionArg);
     }
+
     //    @Override
 //    public synchronized void bulkInsertPhoneNumbers(Set<DBPhoneNumber> phoneNumbers) {
 //        try {

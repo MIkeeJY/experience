@@ -22,9 +22,7 @@ import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.Settings;
 
-import butterknife.ButterKnife;
 import cn.org.cfpamf.data.exception.CrashHandler;
-import cn.org.cfpamf.data.oss.OSSUtil;
 
 /**
  * Android Main Application
@@ -44,7 +42,6 @@ public class CusApplication extends Application {
         super.onCreate();
         if (isDebug) {
             OSSLog.enableLog();
-            ButterKnife.setDebug(isDebug);
         } else {
             //关闭本地debug本地调试模式，用于测试人员反馈日志
             initCrashHandler();
