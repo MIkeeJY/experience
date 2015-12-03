@@ -1,5 +1,7 @@
 package cn.org.cfpamf.data.response;
 
+import android.os.Parcel;
+
 import cn.org.cfpamf.data.response.base.BaseServerResponse;
 
 /**
@@ -12,4 +14,17 @@ import cn.org.cfpamf.data.response.base.BaseServerResponse;
  * 修改备注：
  */
 public class Test extends BaseServerResponse {
+
+    protected Test(Parcel in) {
+    }
+    public static final Creator<BaseServerResponse> CREATOR = new Creator<BaseServerResponse>() {
+        public BaseServerResponse createFromParcel(Parcel source) {
+            return new Test(source);
+        }
+
+        public BaseServerResponse[] newArray(int size) {
+            return new BaseServerResponse[size];
+        }
+    };
+
 }

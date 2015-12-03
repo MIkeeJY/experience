@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
 import com.squareup.okhttp.Response;
 
@@ -16,7 +17,7 @@ import cn.org.cfpamf.data.response.base.BaseServerResponse;
  * Created by zzy on 15/9/19.
  * 抽象出基于服务端统一response处理
  */
-public abstract class AbstractMLPBaseOkHttp extends AbstractBaseOkHttp {
+public abstract class AbstractMLPBaseOkHttp<T extends BaseServerResponse> extends AbstractBaseOkHttp {
 
 
     public AbstractMLPBaseOkHttp(@NonNull Context context, @NonNull Bundle bundle) {
@@ -27,15 +28,16 @@ public abstract class AbstractMLPBaseOkHttp extends AbstractBaseOkHttp {
     public void onSuccess(@NonNull Response response) {
         try {
             String responseString = response.body().string();
-            BaseServerResponse baseServerResponse = new Gson().fromJson(responseString, BaseServerResponse.class);
-            if (Boolean.valueOf(baseServerResponse.getSuccess())) {
+            T t = new Gson().fromJson(responseString, new TypeToken<T>() {
+            }.getType());
+            if (Boolean.valueOf(t.getSuccess())) {
                 //成功也打印日志
                 printLogger(responseString);
                 //处理成功消息
-                onMlpSuccess(responseString);
+                onMlpSuccess(t);
                 Logger.d("responseString==" + responseString);
             } else {
-                onFailed(new ServerResponseException(baseServerResponse.getResponseStatus().getMessage()));
+                onFailed(new ServerResponseException(t.getResponseStatus().getMessage()));
             }
         } catch (Exception e) {
             onFailed(e);
@@ -45,7 +47,7 @@ public abstract class AbstractMLPBaseOkHttp extends AbstractBaseOkHttp {
     /**
      * 子类只处理成功
      *
-     * @param responseBody
+     * @param t
      */
-    public abstract void onMlpSuccess(String responseBody);
+    public abstract void onMlpSuccess(T t);
 }

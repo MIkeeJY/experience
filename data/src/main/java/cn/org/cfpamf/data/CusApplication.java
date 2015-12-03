@@ -40,12 +40,6 @@ public class CusApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (isDebug) {
-            OSSLog.enableLog();
-        } else {
-            //关闭本地debug本地调试模式，用于测试人员反馈日志
-            initCrashHandler();
-        }
         initLogger();
     }
 
@@ -65,12 +59,15 @@ public class CusApplication extends Application {
     private void initLogger() {
         Settings settings = Logger.init(LOGGER_TAG)               // default PRETTYLOGGER or use just init()
                 .setMethodCount(2).hideThreadInfo();            // default 2
-        if (isDebug)
+        if (isDebug) {
             settings.setLogLevel(LogLevel.NONE);
-        else
+            OSSLog.enableLog();
+        } else {
             settings.setLogLevel(LogLevel.FULL);
-    }
+            initCrashHandler();
 
+        }
+    }
 
 
 }

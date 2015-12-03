@@ -6,6 +6,8 @@ import android.os.Bundle;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 
+import cn.org.cfpamf.data.response.base.BaseServerResponse;
+
 
 /**
  * 项目名称：groupBackstage
@@ -16,7 +18,7 @@ import com.squareup.okhttp.RequestBody;
  * 修改时间：2015/10/16 11:15
  * 修改备注：
  */
-public abstract class AbstractMLPGetOkHttp extends AbstractMLPBaseOkHttp {
+public abstract class AbstractMLPGetOkHttp<T extends BaseServerResponse> extends AbstractMLPBaseOkHttp<T> {
 
     public AbstractMLPGetOkHttp(Context context, Bundle bundle) {
         super(context, bundle);

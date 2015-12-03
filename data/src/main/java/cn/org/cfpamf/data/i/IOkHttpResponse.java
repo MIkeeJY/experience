@@ -6,6 +6,8 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 
+import cn.org.cfpamf.data.response.base.BaseServerResponse;
+
 /**
  * 项目名称：groupBackstage
  * 类描述：

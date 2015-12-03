@@ -21,7 +21,7 @@ public class OkHttpFactory {
 
     public static AbstractBaseOkHttp createHttp(Context context, String intentType, Bundle bundle) {
         switch (intentType) {
-            case BaiduTestOkHttp.TYPE_BAIDU:
+            case BaiduTestOkHttp.TYPE_BAI_DU:
                 abstractBaseOkHttp = new BaiduTestOkHttp(context, bundle);
                 break;
         }

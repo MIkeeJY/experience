@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
@@ -19,6 +21,7 @@ import cn.org.cfpamf.data.exception.e.PrintLog;
 import cn.org.cfpamf.data.i.IOkHttpEvent;
 import cn.org.cfpamf.data.i.IOkHttpRequest;
 import cn.org.cfpamf.data.i.IOkHttpResponse;
+import cn.org.cfpamf.data.response.base.BaseServerResponse;
 import cn.org.cfpamf.data.util.TimeUtils;
 import de.greenrobot.event.EventBus;
 

@@ -21,7 +21,7 @@ import cn.org.cfpamf.data.okHttp.BaiduTestOkHttp;
 public class StartServiceManager {
 
     public static void startBaiduOkHttp(Context context) {
-        startIntent(context, BaiduTestOkHttp.TYPE_BAIDU, null);
+        startIntent(context, BaiduTestOkHttp.TYPE_BAI_DU, null);
     }
 
     private static void startIntent(@NonNull Context context, @NonNull String intentType, @Nullable Bundle bundle) {

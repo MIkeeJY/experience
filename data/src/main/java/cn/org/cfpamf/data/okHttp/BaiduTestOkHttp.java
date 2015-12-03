@@ -31,7 +31,7 @@ import de.greenrobot.event.EventBus;
  */
 public class BaiduTestOkHttp extends AbstractBaseOkHttp {
 
-    public static final String TYPE_BAIDU = "BaiduTestOkHttp";
+    public static final String TYPE_BAI_DU = "BaiDuTestOkHttp";
 
     /**
      * @param context
@@ -70,14 +70,14 @@ public class BaiduTestOkHttp extends AbstractBaseOkHttp {
     public void onSuccess(@NonNull Response response) {
         try {
             String strResponse = response.body().string();
-            Baidu baiu = new Baidu();
-            baiu.setId(UUID.randomUUID().toString());
-            baiu.setResponse(strResponse);
+            Baidu baidu = new Baidu();
+            baidu.setId(UUID.randomUUID().toString());
+            baidu.setResponse(strResponse);
             //插入数据库
-            boolean success = new BaiduDbManager(context).insert(baiu);
+            boolean success = new BaiduDbManager(context).insert(baidu);
             if (success) {
                 //通知前台更新
-                EventBus.getDefault().post(baiu);
+                EventBus.getDefault().post(baidu);
             } else {
                 onFailed(new SQLException(strResponse));
             }
