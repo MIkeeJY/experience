@@ -1,4 +1,4 @@
-package cn.org.cfpamf.data.okHttp;
+package cn.org.cfpamf.data.okHttp.params;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -107,7 +107,7 @@ public class OkHttpRequestParams implements Parcelable {
         this.urlParams = (ConcurrentHashMap<String, String>) in.readSerializable();
     }
 
-    public static final Parcelable.Creator<OkHttpRequestParams> CREATOR = new Parcelable.Creator<OkHttpRequestParams>() {
+    public static final Creator<OkHttpRequestParams> CREATOR = new Creator<OkHttpRequestParams>() {
         public OkHttpRequestParams createFromParcel(Parcel source) {
             return new OkHttpRequestParams(source);
         }

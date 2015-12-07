@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 
+import cn.org.cfpamf.data.okHttp.params.OkHttpRequestParams;
 import cn.org.cfpamf.data.response.base.BaseServerResponse;
 
 

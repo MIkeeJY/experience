@@ -20,7 +20,6 @@ import com.squareup.okhttp.RequestBody;
 public abstract class AbstractMLPPostOkHttp extends AbstractMLPBaseOkHttp {
 
     protected static final MediaType JSON = MediaType.parse(CONTENT_TYPE);
-    protected String requestJson;
 
     public AbstractMLPPostOkHttp(Context context, Bundle bundle) {
         super(context, bundle);
@@ -34,7 +33,6 @@ public abstract class AbstractMLPPostOkHttp extends AbstractMLPBaseOkHttp {
     @Override
     public RequestBody getRequestBody() {
         requestJson = new Gson().toJson(bundle.getParcelable(BUNDLE_POST_OR_PUT_KEY));
-        printLog.setRequestBody(requestJson);
         return RequestBody.create(JSON, requestJson);
     }
 }

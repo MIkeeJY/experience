@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import cn.org.cfpamf.data.database.DatabaseManager;
+import cn.org.cfpamf.data.exception.e.PrintLogUtil;
 import cn.org.cfpamf.data.exception.e.ServerResponseException;
 import cn.org.cfpamf.data.sql.BaiduDbManager;
 import cn.org.cfpamf.data.sql.db.Baidu;
@@ -86,4 +87,5 @@ public class BaiduTestOkHttp extends AbstractBaseOkHttp {
             onFailed(e);
         }
     }
+
 }

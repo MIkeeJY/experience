@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
 import com.squareup.okhttp.Response;
 
+import cn.org.cfpamf.data.exception.e.PrintLogUtil;
 import cn.org.cfpamf.data.exception.e.ServerResponseException;
 import cn.org.cfpamf.data.response.base.BaseServerResponse;
 
@@ -31,8 +32,6 @@ public abstract class AbstractMLPBaseOkHttp<T extends BaseServerResponse> extend
             T t = new Gson().fromJson(responseString, new TypeToken<T>() {
             }.getType());
             if (Boolean.valueOf(t.getSuccess())) {
-                //成功也打印日志
-                printLogger(responseString);
                 //处理成功消息
                 onMlpSuccess(t);
                 Logger.d("responseString==" + responseString);
@@ -43,6 +42,7 @@ public abstract class AbstractMLPBaseOkHttp<T extends BaseServerResponse> extend
             onFailed(e);
         }
     }
+
 
     /**
      * 子类只处理成功
