@@ -9,6 +9,8 @@ import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
 import com.squareup.okhttp.Response;
 
+import java.lang.reflect.Type;
+
 import cn.org.cfpamf.data.exception.e.PrintLogUtil;
 import cn.org.cfpamf.data.exception.e.ServerResponseException;
 import cn.org.cfpamf.data.response.base.BaseServerResponse;
@@ -29,8 +31,7 @@ public abstract class AbstractMLPBaseOkHttp<T extends BaseServerResponse> extend
     public void onSuccess(@NonNull Response response) {
         try {
             String responseString = response.body().string();
-            T t = new Gson().fromJson(responseString, new TypeToken<T>() {
-            }.getType());
+            T t = new Gson().fromJson(responseString, getClassT());
             if (Boolean.valueOf(t.getSuccess())) {
                 //处理成功消息
                 onMlpSuccess(t);
@@ -50,4 +51,6 @@ public abstract class AbstractMLPBaseOkHttp<T extends BaseServerResponse> extend
      * @param t
      */
     public abstract void onMlpSuccess(T t);
+
+    public abstract Type getClassT();
 }

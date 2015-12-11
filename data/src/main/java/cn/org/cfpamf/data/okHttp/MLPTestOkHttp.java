@@ -3,6 +3,8 @@ package cn.org.cfpamf.data.okHttp;
 import android.content.Context;
 import android.os.Bundle;
 
+import java.lang.reflect.Type;
+
 import cn.org.cfpamf.data.response.Test;
 
 /**
@@ -19,6 +21,11 @@ public class MLPTestOkHttp extends AbstractMLPGetOkHttp<Test> {
     @Override
     public void onMlpSuccess(Test test) {
 
+    }
+
+    @Override
+    public Type getClassT() {
+        return Test.class;
     }
 
     @Override
