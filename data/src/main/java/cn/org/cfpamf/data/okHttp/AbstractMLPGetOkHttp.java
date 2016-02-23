@@ -21,9 +21,6 @@ import cn.org.cfpamf.data.response.base.BaseServerResponse;
  */
 public abstract class AbstractMLPGetOkHttp<T extends BaseServerResponse> extends AbstractMLPBaseOkHttp<T> {
 
-    public AbstractMLPGetOkHttp(Context context, Bundle bundle) {
-        super(context, bundle);
-    }
 
     @Override
     public Request getRequest() {

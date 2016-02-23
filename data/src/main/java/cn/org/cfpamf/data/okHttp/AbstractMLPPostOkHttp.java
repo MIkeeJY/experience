@@ -21,10 +21,6 @@ public abstract class AbstractMLPPostOkHttp extends AbstractMLPBaseOkHttp {
 
     protected static final MediaType JSON = MediaType.parse(CONTENT_TYPE);
 
-    public AbstractMLPPostOkHttp(Context context, Bundle bundle) {
-        super(context, bundle);
-    }
-
     @Override
     public Request getRequest() {
         return getRequestBuilder().url(getUrl()).post(getRequestBody()).build();

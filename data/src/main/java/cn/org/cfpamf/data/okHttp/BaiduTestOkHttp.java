@@ -32,16 +32,6 @@ import de.greenrobot.event.EventBus;
  */
 public class BaiduTestOkHttp extends AbstractBaseOkHttp {
 
-    public static final String TYPE_BAI_DU = "BaiDuTestOkHttp";
-
-    /**
-     * @param context
-     * @param bundle
-     */
-    public BaiduTestOkHttp(@NonNull Context context, @NonNull Bundle bundle) {
-        super(context, bundle);
-    }
-
     @Override
     public AbstractBaseOkHttp getPostEvent() {
         return this;

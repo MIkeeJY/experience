@@ -55,9 +55,6 @@ public interface IOkHttpRequest {
 
     /**
      * 启动网络请求
-     * @param okHttpClient
-     * @param request
-     * @param callback
      */
-    void execute(@NonNull OkHttpClient okHttpClient, @NonNull Request request, @NonNull Callback callback);
+    void execute();
 }

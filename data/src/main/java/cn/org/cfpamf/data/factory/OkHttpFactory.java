@@ -19,11 +19,18 @@ public class OkHttpFactory {
 
     private static AbstractBaseOkHttp abstractBaseOkHttp;
 
-    public static AbstractBaseOkHttp createHttp(Context context, String intentType, Bundle bundle) {
-        switch (intentType) {
-            case BaiduTestOkHttp.TYPE_BAI_DU:
-                abstractBaseOkHttp = new BaiduTestOkHttp(context, bundle);
-                break;
+    public static AbstractBaseOkHttp createHttp(Context context, String className, Bundle bundle) {
+
+        try {
+            abstractBaseOkHttp = (AbstractBaseOkHttp) Class.forName(className).newInstance();
+            abstractBaseOkHttp.setBundle(bundle);
+            abstractBaseOkHttp.setContext(context);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
         return abstractBaseOkHttp;
     }

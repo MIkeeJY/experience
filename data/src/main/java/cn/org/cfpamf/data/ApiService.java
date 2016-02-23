@@ -37,7 +37,7 @@ public class ApiService extends IntentService {
             //在baseActivity里注册即可
             EventBus.getDefault().post(new NetStatusEvent(NetStatusEvent.Please_Connect_To_The_Network_And_Try_Again));
         } else {
-            OkHttpFactory.createHttp(this, intent.getType(), intent.getExtras());
+            OkHttpFactory.createHttp(this, intent.getType(), intent.getExtras()).execute();
         }
     }
 

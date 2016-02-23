@@ -1,8 +1,6 @@
 package cn.org.cfpamf.data.okHttp;
 
 import java.io.IOException;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 
@@ -20,7 +18,6 @@ import cn.org.cfpamf.data.i.IOkHttpEvent;
 import cn.org.cfpamf.data.i.IOkHttpPrintLog;
 import cn.org.cfpamf.data.i.IOkHttpRequest;
 import cn.org.cfpamf.data.i.IOkHttpResponse;
-import cn.org.cfpamf.data.okHttp.cookieStore.PersistentCookieStore;
 import cn.org.cfpamf.data.util.TimeUtils;
 import de.greenrobot.event.EventBus;
 
@@ -47,6 +44,7 @@ public abstract class AbstractBaseOkHttp implements IOkHttpRequest, IOkHttpRespo
 	public static final String BUNDLE_POST_OR_PUT_KEY = "BUNDLE_POST_OR_PUT_KEY";
 
 	protected Context context;
+
 	protected Bundle bundle;
 	/**
 	 * 网络请求 异常信息
@@ -56,16 +54,6 @@ public abstract class AbstractBaseOkHttp implements IOkHttpRequest, IOkHttpRespo
 	protected String requestTime;
 	protected String responseTime;
 	protected String requestJson;
-
-	/**
-	 * @param context
-	 * @param bundle
-	 */
-	public AbstractBaseOkHttp(Context context, Bundle bundle) {
-		this.context = context.getApplicationContext();
-		this.bundle = bundle;
-		execute(getOkHttpClient(), getRequest(), getResponseCallBack());
-	}
 
 	/**
 	 * 获取HttpClient
@@ -142,13 +130,10 @@ public abstract class AbstractBaseOkHttp implements IOkHttpRequest, IOkHttpRespo
 	/**
 	 * 启动网络请求
 	 * 
-	 * @param okHttpClient
-	 * @param request
-	 * @param callback
 	 */
 	@Override
-	public void execute(OkHttpClient okHttpClient, Request request, Callback callback) {
-		okHttpClient.newCall(request).enqueue(callback);
+	public void execute() {
+		getOkHttpClient().newCall(getRequest()).enqueue(getResponseCallBack());
 		requestTime = TimeUtils.getCurrentTimeInString(new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒"));
 	}
 
@@ -174,5 +159,20 @@ public abstract class AbstractBaseOkHttp implements IOkHttpRequest, IOkHttpRespo
 
 	public String getRequestJson() {
 		return requestJson;
+	}
+	public Bundle getBundle() {
+		return bundle;
+	}
+
+	public void setBundle(Bundle bundle) {
+		this.bundle = bundle;
+	}
+
+	public Context getContext() {
+		return context;
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
 	}
 }

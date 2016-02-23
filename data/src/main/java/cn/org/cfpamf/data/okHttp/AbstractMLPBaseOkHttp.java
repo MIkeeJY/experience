@@ -23,10 +23,6 @@ import cn.org.cfpamf.data.response.base.BaseServerResponse;
 public abstract class AbstractMLPBaseOkHttp<T extends BaseServerResponse> extends AbstractBaseOkHttp {
 
 
-    public AbstractMLPBaseOkHttp(@NonNull Context context, @NonNull Bundle bundle) {
-        super(context, bundle);
-    }
-
     @Override
     public void onSuccess(@NonNull Response response) {
         try {

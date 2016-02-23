@@ -12,12 +12,6 @@ import cn.org.cfpamf.data.response.Test;
  */
 public class MLPTestOkHttp extends AbstractMLPGetOkHttp<Test> {
 
-    public static final String TYPE_MLP_TEST = "MLPTestOkHttp";
-
-    public MLPTestOkHttp(Context context, Bundle bundle) {
-        super(context, bundle);
-    }
-
     @Override
     public void onMlpSuccess(Test test) {
 
