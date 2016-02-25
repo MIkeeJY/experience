@@ -22,6 +22,7 @@ import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.Settings;
 
+import cn.org.cfpamf.data.database.AbstractDatabaseManager;
 import cn.org.cfpamf.data.exception.CrashHandler;
 
 /**
@@ -41,7 +42,13 @@ public class CusApplication extends Application {
     public void onCreate() {
         super.onCreate();
         initLogger();
+        initOpenHelper();
     }
+
+    private void initOpenHelper() {
+        AbstractDatabaseManager.initOpenHelper(getApplicationContext());
+    }
+
 
     private CrashHandler crashHandler;
 

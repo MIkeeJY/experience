@@ -44,10 +44,7 @@ public interface IDatabase<M, K> {
 
     boolean refresh(M m);
 
-    /**
-     * Closing available connections
-     */
-    void closeDbConnections();
+
 
     /**
      * 清理缓存
