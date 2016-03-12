@@ -1,7 +1,5 @@
 package cn.org.cfpamf.data.okHttp;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.orhanobut.logger.Logger;
@@ -13,12 +11,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
 
-import cn.org.cfpamf.data.database.DatabaseManager;
-import cn.org.cfpamf.data.exception.e.PrintLogUtil;
-import cn.org.cfpamf.data.exception.e.ServerResponseException;
 import cn.org.cfpamf.data.sql.BaiduDbManager;
 import cn.org.cfpamf.data.sql.db.Baidu;
-import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -65,7 +59,7 @@ public class BaiduTestOkHttp extends AbstractBaseOkHttp {
             baidu.setId(UUID.randomUUID().toString());
             baidu.setResponse(strResponse);
             //插入数据库
-            boolean success = new BaiduDbManager(context).insert(baidu);
+            boolean success = new BaiduDbManager().insert(baidu);
             if (success) {
                 //通知前台更新
                 EventBus.getDefault().post(baidu);
