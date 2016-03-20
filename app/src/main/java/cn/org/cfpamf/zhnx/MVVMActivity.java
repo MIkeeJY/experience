@@ -9,7 +9,7 @@ import cn.org.cfpamf.data.okHttp.BaiduTestOkHttp;
 import cn.org.cfpamf.data.sql.db.Baidu;
 import cn.org.cfpamf.zhnx.databinding.ActivityMainBinding;
 
-public class MainActivity extends BaseActivity {
+public class MVVMActivity extends BaseActivity {
 
     private ActivityMainBinding activityMainBinding;
 
