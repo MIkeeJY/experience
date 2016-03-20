@@ -1,30 +1,29 @@
 package cn.org.cfpamf.zhnx;
 
 import android.databinding.DataBindingUtil;
+import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.v7.app.AppCompatActivity;
 
 
-import cn.org.cfpamf.data.base.BaseActivity;
 import cn.org.cfpamf.data.manager.StartServiceManager;
 import cn.org.cfpamf.data.okHttp.BaiduTestOkHttp;
 import cn.org.cfpamf.data.sql.db.Baidu;
+import cn.org.cfpamf.data.util.ToastUtils;
 import cn.org.cfpamf.zhnx.databinding.ActivityMainBinding;
+import de.greenrobot.event.EventBus;
 
-public class MVVMActivity extends BaseActivity {
+public class MVVMActivity extends AppCompatActivity {
 
     private ActivityMainBinding activityMainBinding;
 
-    @Override
-    protected void setToolbar() {
-    }
 
     @Override
-    protected void setLayoutContentView() {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         activityMainBinding
                 = DataBindingUtil.setContentView(this, R.layout.activity_main);
-    }
-
-    @Override
-    protected void afterView() {
         StartServiceManager.startBaiduOkHttp(this);
 
     }
@@ -35,7 +34,7 @@ public class MVVMActivity extends BaseActivity {
      * @param baiduTestOkHttp
      */
     public void onEventMainThread(BaiduTestOkHttp baiduTestOkHttp) {
-        createHintDialog("失败", baiduTestOkHttp.getErrorMessage());
+        ToastUtils.showError(baiduTestOkHttp.getErrorMessage(), getApplicationContext());
     }
 
     /**
@@ -46,5 +45,18 @@ public class MVVMActivity extends BaseActivity {
     public void onEventMainThread(Baidu baidu) {
         //更新UI
         activityMainBinding.setBaidu(baidu);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
     }
 }
