@@ -1,19 +1,15 @@
 package cn.org.cfpamf.data.okHttp;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
-import com.squareup.okhttp.Response;
 
 import java.lang.reflect.Type;
 
-import cn.org.cfpamf.data.exception.e.PrintLogUtil;
 import cn.org.cfpamf.data.exception.e.ServerResponseException;
 import cn.org.cfpamf.data.response.base.BaseServerResponse;
+import okhttp3.Response;
 
 
 /**

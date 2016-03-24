@@ -1,11 +1,11 @@
 package cn.org.cfpamf.data.i;
 
-import android.support.annotation.NonNull;
 
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
+
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 /**
  * 项目名称：groupBackstage

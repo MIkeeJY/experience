@@ -2,11 +2,11 @@ package cn.org.cfpamf.data.i;
 
 import android.support.annotation.NonNull;
 
-import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 
-import cn.org.cfpamf.data.response.base.BaseServerResponse;
+import okhttp3.Response;
+
 
 /**
  * 项目名称：groupBackstage

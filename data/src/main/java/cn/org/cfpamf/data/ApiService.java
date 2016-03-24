@@ -3,10 +3,11 @@ package cn.org.cfpamf.data;
 import android.app.IntentService;
 import android.content.Intent;
 
+import org.greenrobot.eventbus.EventBus;
+
 import cn.org.cfpamf.data.bus.NetStatusEvent;
 import cn.org.cfpamf.data.factory.OkHttpFactory;
 import cn.org.cfpamf.data.util.NetWorkUtils;
-import de.greenrobot.event.EventBus;
 
 /**
  * 项目名称：Zhnx

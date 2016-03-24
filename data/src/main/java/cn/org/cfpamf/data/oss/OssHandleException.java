@@ -4,9 +4,9 @@ import com.alibaba.sdk.android.oss.model.OSSException;
 import com.alibaba.sdk.android.oss.model.OSSException.ExceptionType;
 import com.alibaba.sdk.android.oss.model.OSSResponseInfo;
 
+import org.greenrobot.eventbus.EventBus;
 import org.w3c.dom.Document;
 
-import de.greenrobot.event.EventBus;
 
 
 /**

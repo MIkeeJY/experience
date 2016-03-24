@@ -1,12 +1,11 @@
 package cn.org.cfpamf.data.okHttp;
 
-import android.content.Context;
-import android.os.Bundle;
 
 import com.google.gson.Gson;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
+
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 /**
  * 项目名称：groupBackstage

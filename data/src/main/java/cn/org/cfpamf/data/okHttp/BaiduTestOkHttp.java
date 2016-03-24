@@ -3,9 +3,8 @@ package cn.org.cfpamf.data.okHttp;
 import android.support.annotation.NonNull;
 
 import com.orhanobut.logger.Logger;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -13,7 +12,9 @@ import java.util.UUID;
 
 import cn.org.cfpamf.data.sql.BaiduDbManager;
 import cn.org.cfpamf.data.sql.db.Baidu;
-import de.greenrobot.event.EventBus;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * 项目名称：Zhnx
@@ -26,10 +27,6 @@ import de.greenrobot.event.EventBus;
  */
 public class BaiduTestOkHttp extends AbstractBaseOkHttp {
 
-    @Override
-    public AbstractBaseOkHttp getPostEvent() {
-        return this;
-    }
 
     @Override
     public String getUrl() {

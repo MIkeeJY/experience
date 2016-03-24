@@ -2,16 +2,15 @@ package cn.org.cfpamf.zhnx;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import cn.org.cfpamf.data.manager.StartServiceManager;
-import cn.org.cfpamf.data.okHttp.BaiduTestOkHttp;
 import cn.org.cfpamf.data.sql.db.Baidu;
-import cn.org.cfpamf.data.util.ToastUtils;
 import cn.org.cfpamf.zhnx.databinding.ActivityMainBinding;
-import de.greenrobot.event.EventBus;
 
 public class MVVMActivity extends AppCompatActivity {
 
@@ -25,38 +24,28 @@ public class MVVMActivity extends AppCompatActivity {
         activityMainBinding
                 = DataBindingUtil.setContentView(this, R.layout.activity_main);
         StartServiceManager.startBaiduOkHttp(this);
-
     }
 
     /**
-     * 处理失败信息
-     *
-     * @param baiduTestOkHttp
-     */
-    public void onEventMainThread(BaiduTestOkHttp baiduTestOkHttp) {
-        ToastUtils.showError(baiduTestOkHttp.getErrorMessage(), getApplicationContext());
-    }
-
-    /**
-     * 处理成功信息
+     * 处理信息
      *
      * @param baidu
      */
-    public void onEventMainThread(Baidu baidu) {
+    @Subscribe
+    public void onEventBaidu(Baidu baidu) {
         //更新UI
         activityMainBinding.setBaidu(baidu);
     }
 
-
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         EventBus.getDefault().register(this);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
         EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 }

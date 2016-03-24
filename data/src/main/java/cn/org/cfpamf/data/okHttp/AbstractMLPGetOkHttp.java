@@ -1,13 +1,9 @@
 package cn.org.cfpamf.data.okHttp;
 
-import android.content.Context;
-import android.os.Bundle;
-
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-
 import cn.org.cfpamf.data.okHttp.params.OkHttpRequestParams;
 import cn.org.cfpamf.data.response.base.BaseServerResponse;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 
 /**
