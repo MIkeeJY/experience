@@ -24,4 +24,5 @@ public class MLPTestOkHttp extends AbstractMLPGetOkHttp<Test> {
     public String getUrl() {
         return null;
     }
+
 }

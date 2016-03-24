@@ -13,7 +13,7 @@ import android.os.Bundle;
 import cn.org.cfpamf.data.exception.e.HandleOkHttpException;
 import cn.org.cfpamf.data.exception.e.PrintLogUtil;
 import cn.org.cfpamf.data.i.IOkHttpPrintLog;
-import cn.org.cfpamf.data.i.IOkHttpRequest;
+import cn.org.cfpamf.data.i.IOkHttpClient;
 import cn.org.cfpamf.data.i.IOkHttpResponse;
 import cn.org.cfpamf.data.util.ExternalStorageUtil;
 import cn.org.cfpamf.data.util.TimeUtils;
@@ -31,7 +31,7 @@ import okhttp3.Response;
  * 项目名称：groupBackstage 类描述： 创建人：zzy 创建时间：2015/10/20 14:03 修改人：Administrator
  * 修改时间：2015/10/20 14:03 修改备注：
  */
-public abstract class AbstractBaseOkHttp implements IOkHttpRequest, IOkHttpResponse, IOkHttpPrintLog {
+public abstract class AbstractBaseOkHttp implements IOkHttpClient, IOkHttpPrintLog {
 
     private static final String CONTENT_TYPE_KEY = "Content-Type";
     protected static final String CONTENT_TYPE = "application/json; charset=utf-8";

@@ -3,6 +3,8 @@ package cn.org.cfpamf.data.response.base;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import cn.org.cfpamf.data.i.IOkHttpResponse;
+
 /**
  * 项目名称：groupBackstage
  * 类描述：
@@ -12,10 +14,11 @@ import android.os.Parcelable;
  * 修改时间：2015/9/15 17:02
  * 修改备注：
  */
-public class BaseServerResponse implements Parcelable {
+public class BaseServerResponse implements IOkHttpResponse {
 
     private String success;
     private ResponseStatus responseStatus;
+
     public String getSuccess() {
         return success;
     }
@@ -32,33 +35,13 @@ public class BaseServerResponse implements Parcelable {
         this.responseStatus = responseStatus;
     }
 
+    @Override
+    public boolean isSuccess() {
+        return Boolean.valueOf(this.success);
+    }
 
     @Override
-    public int describeContents() {
-        return 0;
+    public String getErrorMessage() {
+        return responseStatus.getMessage();
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.success);
-        dest.writeParcelable(this.responseStatus, 0);
-    }
-
-    public BaseServerResponse() {
-    }
-
-    protected BaseServerResponse(Parcel in) {
-        this.success = in.readString();
-        this.responseStatus = in.readParcelable(ResponseStatus.class.getClassLoader());
-    }
-
-    public static final Creator<BaseServerResponse> CREATOR = new Creator<BaseServerResponse>() {
-        public BaseServerResponse createFromParcel(Parcel source) {
-            return new BaseServerResponse(source);
-        }
-
-        public BaseServerResponse[] newArray(int size) {
-            return new BaseServerResponse[size];
-        }
-    };
 }

@@ -1,13 +1,5 @@
 package cn.org.cfpamf.data.i;
 
-import android.support.annotation.NonNull;
-
-
-import java.io.IOException;
-
-import okhttp3.Response;
-
-
 /**
  * 项目名称：groupBackstage
  * 类描述：
@@ -19,7 +11,7 @@ import okhttp3.Response;
  */
 public interface IOkHttpResponse {
 
-    void onFailed(@NonNull Exception exception);
+    boolean isSuccess();
 
-    void onSuccess(@NonNull Response response) throws IOException;
+    String getErrorMessage();
 }

@@ -2,10 +2,15 @@ package cn.org.cfpamf.data.i;
 
 
 
+import android.support.annotation.NonNull;
+
+import java.io.IOException;
+
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * 项目名称：groupBackstage
@@ -16,7 +21,7 @@ import okhttp3.RequestBody;
  * 修改时间：2015/10/16 10:14
  * 修改备注：
  */
-public interface IOkHttpRequest {
+public interface IOkHttpClient {
     /**
      * 获取HttpClient
      * @return
@@ -57,4 +62,10 @@ public interface IOkHttpRequest {
      * 启动网络请求
      */
     void execute();
+
+
+    void onFailed(@NonNull Exception exception);
+
+
+    void onSuccess(@NonNull Response response) throws IOException;
 }

@@ -8,6 +8,7 @@ import com.orhanobut.logger.Logger;
 import java.lang.reflect.Type;
 
 import cn.org.cfpamf.data.exception.e.ServerResponseException;
+import cn.org.cfpamf.data.i.IOkHttpResponse;
 import cn.org.cfpamf.data.response.base.BaseServerResponse;
 import okhttp3.Response;
 
@@ -16,7 +17,7 @@ import okhttp3.Response;
  * Created by zzy on 15/9/19.
  * 抽象出基于服务端统一response处理
  */
-public abstract class AbstractMLPBaseOkHttp<T extends BaseServerResponse> extends AbstractBaseOkHttp {
+public abstract class AbstractMLPBaseOkHttp<T extends IOkHttpResponse> extends AbstractBaseOkHttp {
 
 
     @Override
@@ -24,12 +25,12 @@ public abstract class AbstractMLPBaseOkHttp<T extends BaseServerResponse> extend
         try {
             String responseString = response.body().string();
             T t = new Gson().fromJson(responseString, getClassT());
-            if (Boolean.valueOf(t.getSuccess())) {
+            if (Boolean.valueOf(t.isSuccess())) {
                 //处理成功消息
                 onMlpSuccess(t);
                 Logger.d("responseString==" + responseString);
             } else {
-                onFailed(new ServerResponseException(t.getResponseStatus().getMessage()));
+                onFailed(new ServerResponseException(t.getErrorMessage()));
             }
         } catch (Exception e) {
             onFailed(e);

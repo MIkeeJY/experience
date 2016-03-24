@@ -3,6 +3,7 @@ package cn.org.cfpamf.data.okHttp;
 
 import com.google.gson.Gson;
 
+import cn.org.cfpamf.data.i.IOkHttpResponse;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -16,7 +17,7 @@ import okhttp3.RequestBody;
  * 修改时间：2015/10/16 10:57
  * 修改备注：
  */
-public abstract class AbstractMLPPostOkHttp extends AbstractMLPBaseOkHttp {
+public abstract class AbstractMLPPostOkHttp<T extends IOkHttpResponse> extends AbstractMLPBaseOkHttp<T> {
 
     protected static final MediaType JSON = MediaType.parse(CONTENT_TYPE);
 

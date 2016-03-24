@@ -1,5 +1,6 @@
 package cn.org.cfpamf.data.okHttp;
 
+import cn.org.cfpamf.data.i.IOkHttpResponse;
 import cn.org.cfpamf.data.okHttp.params.OkHttpRequestParams;
 import cn.org.cfpamf.data.response.base.BaseServerResponse;
 import okhttp3.Request;
@@ -15,7 +16,7 @@ import okhttp3.RequestBody;
  * 修改时间：2015/10/16 11:15
  * 修改备注：
  */
-public abstract class AbstractMLPGetOkHttp<T extends BaseServerResponse> extends AbstractMLPBaseOkHttp<T> {
+public abstract class AbstractMLPGetOkHttp<T extends IOkHttpResponse> extends AbstractMLPBaseOkHttp<T> {
 
 
     @Override
