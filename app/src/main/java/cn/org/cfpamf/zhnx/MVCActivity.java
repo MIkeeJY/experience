@@ -1,8 +1,8 @@
 package cn.org.cfpamf.zhnx;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Toast;
@@ -20,6 +20,10 @@ public class MVCActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mvc);
+        initView();
+    }
+
+    private void initView() {
 
         DataSources dataResources = new DemoDataSources();
 
