@@ -1,4 +1,4 @@
-package cn.org.cfpamf.data.exception.e;
+package cn.org.cfpamf.data.log;
 
 import android.content.Context;
 
@@ -19,7 +19,7 @@ public class PrintLogUtil {
 	 * 
 	 * @param
 	 */
-	private static void printLogToSdCard(Context context, PrintLog printLog) {
+	private static void printLogToSdCard(Context context, LogBean printLog) {
 		String fileName = mtsLog + printLog.getRequestTime() + ".txt";
 		String messageLog = printLog.toString();
 		boolean b = FileUtils.writeFile(Constants.APP_BASE_PATH + fileName, messageLog);
@@ -37,7 +37,7 @@ public class PrintLogUtil {
 	}
 
 	public static void createPrintLogToSdCard(Context context, AbstractBaseOkHttp abstractBaseOkHttp) {
-		PrintLog printLog = new PrintLog();
+		LogBean printLog = new LogBean();
 		printLog.setHeaders(abstractBaseOkHttp.getRequest().toString());
 		printLog.setResponseTime(abstractBaseOkHttp.getResponseTime());
 		printLog.setRequestTime(abstractBaseOkHttp.getRequestTime());

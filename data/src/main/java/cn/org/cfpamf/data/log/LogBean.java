@@ -1,4 +1,4 @@
-package cn.org.cfpamf.data.exception.e;
+package cn.org.cfpamf.data.log;
 
 
 import cn.org.cfpamf.data.util.StringUtils;
@@ -7,7 +7,7 @@ import cn.org.cfpamf.data.util.StringUtils;
  * 项目名称：groupBackstage 类描述： 创建人：zzy 创建时间：2015/10/16 14:55 修改人：Administrator
  * 修改时间：2015/10/16 14:55 修改备注：
  */
-public class PrintLog {
+public class LogBean {
 
 	private String requestBody;
 
