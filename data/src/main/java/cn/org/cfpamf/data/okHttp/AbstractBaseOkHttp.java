@@ -1,5 +1,8 @@
 package cn.org.cfpamf.data.okHttp;
 
+import android.content.Context;
+import android.os.Bundle;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -7,14 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import android.content.Context;
-import android.os.Bundle;
-
-import cn.org.cfpamf.data.exception.e.HandleOkHttpException;
-import cn.org.cfpamf.data.exception.e.PrintLogUtil;
-import cn.org.cfpamf.data.i.IOkHttpPrintLog;
+import cn.org.cfpamf.data.exception.e.ErrorMessageFactory;
 import cn.org.cfpamf.data.i.IOkHttpClient;
-import cn.org.cfpamf.data.i.IOkHttpResponse;
+import cn.org.cfpamf.data.i.IOkHttpPrintLog;
+import cn.org.cfpamf.data.log.PrintLogUtil;
 import cn.org.cfpamf.data.util.ExternalStorageUtil;
 import cn.org.cfpamf.data.util.TimeUtils;
 import okhttp3.Cache;
@@ -140,7 +139,7 @@ public abstract class AbstractBaseOkHttp implements IOkHttpClient, IOkHttpPrintL
     @Override
     public void onFailed(Exception exception) {
         responseTime = TimeUtils.getCurrentTimeInString(new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒"));
-        errorMessage = HandleOkHttpException.handleMessage(exception);
+        errorMessage = ErrorMessageFactory.createMessage(exception);
         printLog();
         // 通知前台更新 失败后返回子类对象 在Activity里注册子类的监听
         com.orhanobut.logger.Logger.e(errorMessage);
