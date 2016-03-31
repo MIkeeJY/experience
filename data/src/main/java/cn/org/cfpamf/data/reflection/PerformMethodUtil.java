@@ -72,4 +72,17 @@ public class PerformMethodUtil {
     public void performMethodOnMainThread(Object target, String method, Object... params) {
         performMethodOnMainThread(target, method, 0, params);
     }
+
+    public void performMethod(Object target, String method, Object... params) {
+        Class[] types = null;
+        if (params != null) {
+            types = Util.getParamTypes(params);
+        }
+        try {
+            Method m = target.getClass().getMethod(method, types);
+            new MethodBean(target, m, params).invoke();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
 }
