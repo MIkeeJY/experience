@@ -46,6 +46,7 @@ public class PerformMethodUtil {
 
 
     /**
+     * 必需初始化handler才能被调用
      * @param target
      * @param method
      * @param delay
@@ -69,11 +70,23 @@ public class PerformMethodUtil {
         }
     }
 
+    /**
+     * 必需初始化handler才能被调用
+     * @param target
+     * @param method
+     * @param params
+     */
     public void performMethodOnMainThread(Object target, String method, Object... params) {
         performMethodOnMainThread(target, method, 0, params);
     }
 
-    public void performMethod(Object target, String method, Object... params) {
+    /**
+     * 这个方法可以直接调用,省去handler初始化操作
+     * @param target
+     * @param method
+     * @param params
+     */
+    public static void performMethod(Object target, String method, Object... params) {
         Class[] types = null;
         if (params != null) {
             types = Util.getParamTypes(params);
