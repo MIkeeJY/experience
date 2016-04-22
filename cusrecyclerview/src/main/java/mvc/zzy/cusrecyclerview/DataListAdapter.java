@@ -94,8 +94,7 @@ public class DataListAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             final CellModel item = getItem(position);
             holder.itemView.setTag(item);
             bindItemViewClickListener(holder, position);
-            Cell cell = item.cell;
-            cell.resetCell(holder.itemView);
+            Cell cell = holder.cell;
             cell.setModel(item);
             cell.layoutSubviews();
         } catch (Exception e) {
@@ -116,8 +115,10 @@ public class DataListAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         BaseViewHolder viewHolder = null;
         try {
             CellModel cellModel = mList.get(viewType);
-            View view = inflateItemView(parent, cellModel.layout);
-            viewHolder = new BaseViewHolder(view);
+            if (cellModel == null) {
+                throw new NullPointerException("CellModel can not be null");
+            }
+            viewHolder = new BaseViewHolder(inflateItemView(parent, cellModel.layout), cellModel.cell);
         } catch (Exception e) {
             if (adapterInterface != null) {
                 adapterInterface.getException(e);

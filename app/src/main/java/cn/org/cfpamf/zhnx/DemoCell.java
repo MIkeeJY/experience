@@ -15,7 +15,7 @@ public class DemoCell implements Cell {
     TextView text;
 
     @Override
-    public void resetCell(View view) {
+    public void initView(View view) {
         text= (TextView) view.findViewById(R.id.text_app);
 
     }

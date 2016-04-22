@@ -26,8 +26,6 @@ public class DemoDataSources extends DataSources {
 
         for (int i = 0; i < 10; i++) {
             DemoCellModel demoCellModel = new DemoCellModel();
-
-
             demoCellModel.cell = new DemoCell();
             if (i % 2 == 0) {
                 demoCellModel.layout = R.layout.cell;
