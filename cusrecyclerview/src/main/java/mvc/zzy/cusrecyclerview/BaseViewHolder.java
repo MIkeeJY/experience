@@ -1,5 +1,6 @@
 package mvc.zzy.cusrecyclerview;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -9,7 +10,7 @@ import android.view.View;
 public class BaseViewHolder extends RecyclerView.ViewHolder {
     public Cell cell = null;
 
-    public BaseViewHolder(View itemView, Cell cell) {
+    public BaseViewHolder(@NonNull View itemView,@NonNull Cell cell) {
         super(itemView);
         this.cell = cell;
         if (cell == null)

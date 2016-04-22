@@ -1,6 +1,7 @@
 package mvc.zzy.cusrecyclerview;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
@@ -19,9 +20,9 @@ public class CusRecyclerView extends RecyclerView {
         super(context, attr);
     }
 
-    public void setDataResources(DataSources dataResources) {
+    public void setDataResources(@NonNull DataSources dataResources) {
         if (dataResources == null) {
-            return;
+            throw new NullPointerException("DataSources can not be null");
         }
         this.mDataResources = dataResources;
         this.setAdapter(mDataResources.getDataListAdapter());

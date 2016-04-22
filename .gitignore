@@ -94,3 +94,4 @@ domain/domain.iml
 /build/generated/mockable-android-23.jar
 /cusrecyclerview/cusrecyclerview.iml
 /experience.iml
+/build/intermediates/dex-cache/*.xml

@@ -1,6 +1,7 @@
 package mvc.zzy.cusrecyclerview;
 
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public abstract class DataSources implements DataInterface, AdapterInterface {
         onLoadModel(mModelList);
     }
 
-    public void addItem(CellModel cellModel) {
+    public void addItem(@NonNull CellModel cellModel) {
         mDataListAdapter.add(cellModel);
     }
 

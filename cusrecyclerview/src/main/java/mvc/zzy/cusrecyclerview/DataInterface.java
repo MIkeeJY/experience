@@ -1,5 +1,7 @@
 package mvc.zzy.cusrecyclerview;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 /**
@@ -7,7 +9,7 @@ import java.util.List;
  */
 public  interface DataInterface {
 
-     void onRequestSuccess(int code, String response);
-     void onRequestFailure(int errCode, String errMsg);
-     void onLoadModel(List<CellModel> list);
+     void onRequestSuccess(@NonNull int code,@NonNull String response);
+     void onRequestFailure(@NonNull int errCode,@NonNull String errMsg);
+     void onLoadModel(@NonNull List<CellModel> list);
 }
