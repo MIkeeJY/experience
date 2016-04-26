@@ -1,14 +1,13 @@
 package cn.org.cfpamf.data.database;
 
-import java.util.Collection;
-import java.util.List;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.Collection;
+import java.util.List;
 
 import cn.org.cfpamf.data.sql.dao.DaoMaster;
 import cn.org.cfpamf.data.sql.dao.DaoSession;
@@ -31,17 +30,17 @@ public abstract class AbstractDatabaseManager<M, K> implements IDatabase<M, K> {
 	protected static DaoSession daoSession;
 	/**
 	 * 初始化OpenHelper
-	 * 
+	 *
 	 * @param context
 	 */
 	public static void initOpenHelper(@NonNull Context context) {
 		mHelper = getOpenHelper(context, DEFAULT_DATABASE_NAME);
 		openWritableDb();
 	}
-	
+
 	/**
 	 * 初始化OpenHelper
-	 * 
+	 *
 	 * @param context
 	 * @param dataBaseName
 	 */
@@ -63,7 +62,7 @@ public abstract class AbstractDatabaseManager<M, K> implements IDatabase<M, K> {
 	protected static void openWritableDb() throws SQLiteException {
 		daoSession = new DaoMaster(getWritableDatabase()).newSession();
 	}
-	
+
 	/**
 	 * @return
 	 */
@@ -88,7 +87,7 @@ public abstract class AbstractDatabaseManager<M, K> implements IDatabase<M, K> {
 
 	/**
 	 * 只关闭helper就好,看源码就知道helper关闭的时候会关闭数据库
-	 * 
+	 *
 	 */
 	public static void closeDbConnections() {
 		if (mHelper != null) {

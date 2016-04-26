@@ -6,22 +6,20 @@ import android.os.Bundle;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import cn.org.cfpamf.data.exception.e.ErrorMessageFactory;
 import cn.org.cfpamf.data.i.IOkHttpClient;
 import cn.org.cfpamf.data.i.IOkHttpPrintLog;
 import cn.org.cfpamf.data.log.PrintLogUtil;
+import cn.org.cfpamf.data.okHttp.cookies.PersistentCookieJar;
+import cn.org.cfpamf.data.okHttp.cookies.cache.SetCookieCache;
+import cn.org.cfpamf.data.okHttp.cookies.persistence.SharedPrefsCookiePersistor;
 import cn.org.cfpamf.data.util.ExternalStorageUtil;
 import cn.org.cfpamf.data.util.TimeUtils;
 import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.Cookie;
-import okhttp3.CookieJar;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -31,12 +29,6 @@ import okhttp3.Response;
  * 修改时间：2015/10/20 14:03 修改备注：
  */
 public abstract class AbstractBaseOkHttp implements IOkHttpClient, IOkHttpPrintLog {
-
-    private static final String CONTENT_TYPE_KEY = "Content-Type";
-    protected static final String CONTENT_TYPE = "application/json; charset=utf-8";
-    private static final String ACCEPT_KEY = "Accept";
-    private static final String ACCEPT = "application/json";
-    private static final String UTF8 = "utf8";
 
     private static OkHttpClient.Builder okHttpClientBuilder;
     /**
@@ -71,23 +63,7 @@ public abstract class AbstractBaseOkHttp implements IOkHttpClient, IOkHttpPrintL
         okHttpClientBuilder = new OkHttpClient.Builder();
         okHttpClientBuilder.connectTimeout(30, TimeUnit.SECONDS);
         okHttpClientBuilder.cache(new Cache(new File(ExternalStorageUtil.getExternalDownloadPath() + File.separator + "cache.tmp"), cacheSize));
-        okHttpClientBuilder.cookieJar(new CookieJar() {
-            private List<Cookie> cookies;
-
-            @Override
-            public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-                this.cookies = cookies;
-            }
-
-            @Override
-            public List<Cookie> loadForRequest(HttpUrl url) {
-                if (cookies != null)
-                    return cookies;
-                return new ArrayList<Cookie>();
-
-            }
-        });
-
+        okHttpClientBuilder.cookieJar(new PersistentCookieJar(new SetCookieCache(),new SharedPrefsCookiePersistor(context)));
         return okHttpClientBuilder.build();
     }
 
@@ -98,7 +74,7 @@ public abstract class AbstractBaseOkHttp implements IOkHttpClient, IOkHttpPrintL
      */
     @Override
     public Request.Builder getRequestBuilder() {
-        return new Request.Builder().addHeader(CONTENT_TYPE_KEY, CONTENT_TYPE).addHeader(ACCEPT_KEY, ACCEPT);
+        return new Request.Builder().addHeader(HttpConstant.CONTENT_TYPE_KEY, HttpConstant.CONTENT_TYPE).addHeader(HttpConstant.ACCEPT_KEY, HttpConstant.ACCEPT);
     }
 
     /**
