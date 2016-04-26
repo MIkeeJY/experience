@@ -17,7 +17,6 @@ package cn.org.cfpamf.data;
 
 import android.app.Application;
 
-import com.alibaba.sdk.android.oss.util.OSSLog;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.Settings;
@@ -68,7 +67,6 @@ public class CusApplication extends Application {
                 .setMethodCount(2).hideThreadInfo();            // default 2
         if (isDebug) {
             settings.setLogLevel(LogLevel.NONE);
-            OSSLog.enableLog();
         } else {
             settings.setLogLevel(LogLevel.FULL);
             initCrashHandler();
