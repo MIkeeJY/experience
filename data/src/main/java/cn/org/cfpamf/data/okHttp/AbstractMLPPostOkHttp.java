@@ -19,7 +19,7 @@ import okhttp3.RequestBody;
  */
 public abstract class AbstractMLPPostOkHttp<T extends IOkHttpResponse> extends AbstractMLPBaseOkHttp<T> {
 
-    protected static final MediaType JSON = MediaType.parse(CONTENT_TYPE);
+    protected static final MediaType JSON = MediaType.parse(HttpConstant.CONTENT_TYPE);
 
     @Override
     public Request getRequest() {
